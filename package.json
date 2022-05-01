@@ -1,0 +1,9 @@
+{
+    "name": "xyz.coderiftel.jug",
+    "version": "1.0.0",
+    "description": "JSON generator",
+    "displayName": "jug",
+    "author": {"name": "coderiftel"},
+    "hideInEditor": false,
+    "keywords": ["lightweight", "simple", "json", "generator", "coderiftel", "jug"]
+}
