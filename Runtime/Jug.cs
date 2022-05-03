@@ -4,8 +4,11 @@ namespace jug {
     public enum Nat { Obj, Arr, Str, Pri };
     public struct Ent {
         public Nat nat;
-        public string data;
         public int size;
+
+        public string data;
+        public int start;
+        public int len;
 
         public static Ent Obj(int size) {
             return new Ent { nat = Nat.Obj, size = size };
@@ -16,11 +19,11 @@ namespace jug {
         }
 
         public static Ent Str(string str) {
-            return new Ent { nat = Nat.Str, data = str };
+            return new Ent { nat = Nat.Str, data = str, len = str.Length };
         }
 
         public static Ent Pri(string pri) {
-            return new Ent { nat = Nat.Pri, data = pri };
+            return new Ent { nat = Nat.Pri, data = pri, len = pri.Length };
         }
     }
 
@@ -59,7 +62,7 @@ namespace jug {
                     case Nat.Str:
                     case Nat.Pri:
                         if (ents[i].nat == Nat.Str) builder.Append('"');
-                        builder.Append(ents[i].data);
+                        builder.Append(ents[i].data, ents[i].start, ents[i].len);
                         if (ents[i].nat == Nat.Str) builder.Append('"');
                         i++;
                         break;
