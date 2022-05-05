@@ -19,10 +19,12 @@ namespace jug {
         }
 
         public static Ent Str(string str) {
+            if (str == null) return Ent.Pri("null");
             return new Ent { nat = Nat.Str, data = str, len = str.Length };
         }
 
         public static Ent Pri(string pri) {
+            if (pri == null) pri = "null";
             return new Ent { nat = Nat.Pri, data = pri, len = pri.Length };
         }
     }
@@ -36,6 +38,7 @@ namespace jug {
 
         public string Gen(int start, Ent[] ents, int indent) {
             builder.Clear();
+            if (ents == null || start < 0 || start >= ents.Length) return "{}";
             PriGen(start, ents, indent, 0);
             return builder.ToString();
         }
@@ -50,10 +53,11 @@ namespace jug {
                 if (ind > 0 && parent == Nat.Arr) Indent(depth, ind);
                 if (parent == Nat.Obj && j % 2 == 0 && j != 0) builder.Append(',');
                 if (ind > 0 && parent == Nat.Obj && j % 2 == 0) Indent(depth, ind);
-                switch (ents[i].nat) {
+                var ent = ents[i];
+                switch (ent.nat) {
                     case Nat.Obj:
                     case Nat.Arr:
-                        var nat = ents[i].nat;
+                        var nat = ent.nat;
                         if (nat == Nat.Arr) builder.Append('['); else builder.Append('{');
                         i = PriGen(i + 1, ents, ind, depth + 1);
                         if (ind > 0) Indent(depth, ind);
@@ -61,9 +65,9 @@ namespace jug {
                         break;
                     case Nat.Str:
                     case Nat.Pri:
-                        if (ents[i].nat == Nat.Str) builder.Append('"');
-                        builder.Append(ents[i].data, ents[i].start, ents[i].len);
-                        if (ents[i].nat == Nat.Str) builder.Append('"');
+                        if (ent.nat == Nat.Str) builder.Append('"');
+                        if (ent.data != null) builder.Append(ent.data, ent.start, ent.len);
+                        if (ent.nat == Nat.Str) builder.Append('"');
                         i++;
                         break;
                 }
